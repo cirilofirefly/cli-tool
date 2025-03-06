@@ -3,10 +3,11 @@ import Ajv from 'ajv';
 import { readFile } from 'fs/promises';
 import betterAjvErrors from 'better-ajv-errors';
 import createLogger from "../logger.js";
+import { LOGGER_TYPE } from '../contants.js';
 const schema = JSON.parse(await readFile(new URL('./schema.json', import.meta.url), 'utf-8'));
 const ajv = new Ajv();
 const configLoader = cosmiconfigSync('tool');
-const logger = createLogger('config:mgr');
+const logger = createLogger(LOGGER_TYPE.CONFIG_MANAGER);
 
 export function getConfig() {
 
@@ -26,7 +27,7 @@ export function getConfig() {
             console.log();
             console.log(betterAjvErrors(schema, result.config, ajv.errors));
             process.exit(1);
-            
+
         }
 
         logger.debug('Found configuration', result.config);
